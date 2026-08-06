@@ -1,0 +1,6 @@
+interface InterestBearing{
+	
+
+	 void calculateInterest();
+	
+}
