@@ -24,13 +24,19 @@ class CurrentAccount extends BankAccount{
 	@Override
 	protected void validateWithdrawal(double amount) throws BankException{
 	
-
-			if(amount > getBalance() + this.overDraft){
+			if(amount<0){
+					throw new InvalidAmountException();
+			}
+			
+			else if(amount <= getBalance() + this.overDraft){
 	
+					return;				}
+			else{
 					throw new OverDraftLimitExceeded();
 				}
+			
 
-				super.validateWithdrawal(amount);
+			//	super.validateWithdrawal(amount);
 
 				
 	}

@@ -9,7 +9,37 @@ class Bank{
 		accounts=new ArrayList<>();
 	}
 
+	public void withdraw(double amount,long accNumber)throws BankException,NullPointerException{
 	
+		BankAccount bankaccount=findBankAccount(accNumber);
+
+			if(bankaccount==null){
+			throw new NullPointerException();
+			}else{
+			
+			bankaccount.withdraw(amount);
+			}
+			
+	}
+	
+	public void deposit(double amount,long accNumber)throws BankException,NullPointerException{
+	
+			BankAccount bankaccount=findBankAccount(accNumber);
+
+			if(bankaccount==null){
+			throw new NullPointerException();
+			}else{
+			try{
+			bankaccount.deposit(amount);
+				}
+			catch(BankException e){
+	
+				System.out.println(e);
+				}
+			}
+
+			
+	}
 
 	public void openAccount(BankAccount account){
 	
@@ -145,6 +175,13 @@ class Bank{
 
 			bankRef.openAccount(bankaccount3);
 
+		BankAccount bankaccount4=new CurrentAccount(212,"Arun eshwar",10000,20000);
+				bankRef.openAccount(bankaccount4);
+
+		BankAccount bankaccount5=new SalaryAccount(214,"Arunachalam",210100,5000);
+				bankRef.openAccount(bankaccount5);
+
+	
 			BankAccount acc=bankRef.findBankAccount(123);
 			System.out.println(acc.toString());
 
@@ -193,8 +230,33 @@ class Bank{
 	
 					System.out.println(account.toString());
 				}
-
+			try{
 			
+			bankRef.withdraw(10000,212);
+			bankRef.withdraw(19000,212);
+				
+
+			bankRef.withdraw(2000,212);}
+			catch(Exception e){
+	
+				System.out.println(e);
+				}
+			
+			
+
+			try{	bankRef.deposit(10000,214);
+				bankRef.deposit(-500,214);}
+	
+			catch(Exception e){
+				System.out.println(e);
+				}
+			ArrayList<BankAccount>listOfAccounts5=bankRef.showAllAccounts();
+
+			for (BankAccount account:listOfAccounts5){
+	
+					System.out.println(account.toString());
+				}
+
 	}
 	
 }
