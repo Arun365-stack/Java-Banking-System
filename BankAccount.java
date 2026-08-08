@@ -1,4 +1,5 @@
-abstract class BankAccount{
+import java.io.Serializable;
+abstract class BankAccount implements Serializable{
 	
 	protected long accNumber;
 	protected String accName;

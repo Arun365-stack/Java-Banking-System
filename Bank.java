@@ -1,5 +1,8 @@
+import java.io.*;
+
+import java.io.Serializable;
 import java.util.*;
-class Bank{
+class Bank implements Serializable{
 	
 	private ArrayList <BankAccount> accounts;
 
@@ -159,29 +162,84 @@ class Bank{
 			
 		}
 
-	public static void main(String args[]){
+	public void saveBank(){
 	
-		Bank bankRef=new Bank();
+	
+			try{
+		FileOutputStream fos=new FileOutputStream("bank.dat");
+		ObjectOutputStream ous=new ObjectOutputStream(fos);
 
-		BankAccount bankaccount=new SavingsAccount(123,"NallaSivam",50000,10,20000);
+			ous.writeObject(this);
+
+			
+			ous.close();
+			}
+
+
+		catch(Exception e){
+	
+				System.out.println(e);
+			}
+	}
+
+	public static Bank loadBank(){
+	
+			try{
+		FileInputStream fos=new FileInputStream("bank.dat");
+		ObjectInputStream ous=new ObjectInputStream(fos);
+
+			Bank bank=(Bank)ous.readObject();
+
+				
+			ous.close();
+
+			return bank;
+			}
+
+			
+		catch(Exception e){
+	
+				System.out.println(e);
+			}
+				return null;
+		}
+
+	public static void main(String args[]){
+
+		
+
+	//	Bank bankRef=new Bank();
+				
+		
+		Bank bankRef=Bank.loadBank();
+
+		
+
+	/*	BankAccount bankaccount=new SavingsAccount(123,"NallaSivam",50000,10,20000);
 
 			bankRef.openAccount(bankaccount);
+		//	bankRef.saveBank(bankaccount);
 
 		BankAccount bankaccount1=new GoldAccount(2321,"Sivaperuman",100000,7,50000,100);
 
 			bankRef.openAccount(bankaccount1);
-		
+		//	bankRef.saveBank(bankaccount1);
+
 		BankAccount bankaccount3=new GoldAccount(2311,"krishna",100000,7,50000,100);
 
-			bankRef.openAccount(bankaccount3);
+		//	bankRef.openAccount(bankaccount3);
+		//	bankRef.saveBank(bankaccount3);
 
 		BankAccount bankaccount4=new CurrentAccount(212,"Arun eshwar",10000,20000);
 				bankRef.openAccount(bankaccount4);
+		//		bankRef.saveBank(bankaccount4);
 
 		BankAccount bankaccount5=new SalaryAccount(214,"Arunachalam",210100,5000);
 				bankRef.openAccount(bankaccount5);
+		//		bankRef.saveBank(bankaccount5);                               */        
 
-	
+			//	bankRef.saveBank();
+				bankRef.loadBank();	
 			BankAccount acc=bankRef.findBankAccount(123);
 			System.out.println(acc.toString());
 
@@ -256,6 +314,9 @@ class Bank{
 	
 					System.out.println(account.toString());
 				}
+
+
+			
 
 	}
 	
