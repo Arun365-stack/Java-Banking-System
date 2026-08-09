@@ -1,5 +1,6 @@
 import java.io.*;
 
+import java.util.stream.Collectors;
 import java.io.Serializable;
 import java.util.*;
 class Bank implements Serializable{
@@ -204,6 +205,45 @@ class Bank implements Serializable{
 				return null;
 		}
 
+
+		public <T extends BankAccount> ArrayList<T> findAccounts(Class<T> type) {
+		
+				ArrayList<T> accs=new ArrayList<>();
+
+
+				for(BankAccount ba:accounts){
+	
+
+						//if(type.isInstance(ba)){
+						if (ba.getClass() == type){
+
+							accs.add(type.cast(ba));
+						}
+	
+					}
+
+				return accs;
+				
+                        }
+
+		public  <T extends BankAccount> List<T> givesSpecificAccount(Class<T> type){
+	
+		         List<T>letsusLoopu     =  accounts.stream()
+                                      .filter(account -> type.isInstance(account))
+                                      .map(account -> type.cast(account))
+                                      .collect(Collectors.toList());
+		              	
+			
+			/*		for(T sa:letsusLoopu){
+
+						System.out.println(sa);
+
+				     } */
+						return letsusLoopu;
+				}
+
+		
+			
 	public static void main(String args[]){
 
 		
@@ -214,7 +254,9 @@ class Bank implements Serializable{
 		Bank bankRef=Bank.loadBank();
 
 		
+				System.out.println("Style Style ma...");
 
+		
 	/*	BankAccount bankaccount=new SavingsAccount(123,"NallaSivam",50000,10,20000);
 
 			bankRef.openAccount(bankaccount);
@@ -227,7 +269,7 @@ class Bank implements Serializable{
 
 		BankAccount bankaccount3=new GoldAccount(2311,"krishna",100000,7,50000,100);
 
-		//	bankRef.openAccount(bankaccount3);
+			bankRef.openAccount(bankaccount3);
 		//	bankRef.saveBank(bankaccount3);
 
 		BankAccount bankaccount4=new CurrentAccount(212,"Arun eshwar",10000,20000);
@@ -236,10 +278,49 @@ class Bank implements Serializable{
 
 		BankAccount bankaccount5=new SalaryAccount(214,"Arunachalam",210100,5000);
 				bankRef.openAccount(bankaccount5);
-		//		bankRef.saveBank(bankaccount5);                               */        
+		//		bankRef.saveBank(bankaccount5);                                     
 
-			//	bankRef.saveBank();
-				bankRef.loadBank();	
+			//	bankRef.saveBank();                                                        
+			//	bankRef.loadBank();	*/
+
+
+			List<GoldAccount> result =	bankRef.givesSpecificAccount(GoldAccount.class);
+
+			System.out.println(result);
+
+				
+		ArrayList<SavingsAccount>savingsAccounts=bankRef.findAccounts(SavingsAccount.class);
+
+				
+					System.out.println(savingsAccounts);
+
+				
+
+		ArrayList<GoldAccount> gold =
+                                          bankRef.findAccounts(GoldAccount.class);
+
+				
+					System.out.println(gold);
+
+				
+
+		ArrayList<SalaryAccount> salary =
+                                          bankRef.findAccounts(SalaryAccount.class);
+
+				
+					System.out.println(salary);
+
+				
+
+		ArrayList<CurrentAccount> current =
+                                          bankRef.findAccounts(CurrentAccount.class);
+
+				
+					System.out.println(current);  
+
+
+
+
 			BankAccount acc=bankRef.findBankAccount(123);
 			System.out.println(acc.toString());
 
