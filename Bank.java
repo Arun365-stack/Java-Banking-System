@@ -191,7 +191,7 @@ class Bank implements Serializable{
 
 			Bank bank=(Bank)ous.readObject();
 
-				
+						
 			ous.close();
 
 			return bank;
@@ -280,7 +280,7 @@ class Bank implements Serializable{
 				bankRef.openAccount(bankaccount5);
 		//		bankRef.saveBank(bankaccount5);                                     
 
-			//	bankRef.saveBank();                                                        
+				bankRef.saveBank();                                                        
 			//	bankRef.loadBank();	*/
 
 
@@ -372,10 +372,10 @@ class Bank implements Serializable{
 			try{
 			
 			bankRef.withdraw(10000,212);
-			bankRef.withdraw(19000,212);
+			bankRef.withdraw(1000,212);
 				
 
-			bankRef.withdraw(2000,212);}
+			bankRef.withdraw(22000,212);}
 			catch(Exception e){
 	
 				System.out.println(e);
