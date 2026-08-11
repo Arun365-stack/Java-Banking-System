@@ -3,6 +3,10 @@ class ThreadPractice1{
 
 		int count=0;
 
+		AtomicInteger count = new AtomicInteger();
+
+                 count.incrementAndGet();
+
 		public synchronized void increment(){
 
 			                  for (int i = 0; i < 100; i++) {

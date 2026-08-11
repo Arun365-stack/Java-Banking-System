@@ -1,16 +1,20 @@
 import java.io.*;
-
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.io.Serializable;
 import java.util.*;
 class Bank implements Serializable{
 	
-	private ArrayList <BankAccount> accounts;
+	// private ArrayList <BankAccount> accounts;
+
+	   private ConcurrentHashMap <Long,BankAccount> accounts;
 
 	
 	public Bank(){
 	
-		accounts=new ArrayList<>();
+		//accounts=new ArrayList<>();
+
+			accounts=new ConcurrentHashMap<>();
 	}
 
 	public void withdraw(double amount,long accNumber)throws BankException,NullPointerException{
@@ -45,9 +49,14 @@ class Bank implements Serializable{
 			
 	}
 
-	public void openAccount(BankAccount account){
+/*	public void openAccount(BankAccount account){
 	
 		accounts.add(account);
+		} */
+
+	public void openAccount(long accNum,BankAccount account){
+	
+		accounts.put(accNum,account);
 		}
 
 	public void closeAccount(long accNumber)throws BankException {
@@ -78,7 +87,7 @@ class Bank implements Serializable{
 				} */
 
 			
-			for(int i=0;i<accounts.size();i++){
+		/*	for(int i=0;i<accounts.size();i++){
 			
 				BankAccount account=accounts.get(i);
 				if(account.getAccNumber()==accNumber){
@@ -89,9 +98,21 @@ class Bank implements Serializable{
 				
 				} 
 
-				throw new BankException();
+				throw new BankException();    */
 
 
+			
+				
+			  BankAccount removed = accounts.remove(accNumber);
+
+    if (removed == null) {
+        throw new BankException();
+    }
+						
+						 
+				
+				
+				
 
 
 
@@ -103,7 +124,7 @@ class Bank implements Serializable{
 						accounts.remove(ba); */
 		} 
 
-	public BankAccount findBankAccount(long accnumber ){
+	/* public BankAccount findBankAccount(long accnumber ){
 	
 		for(BankAccount account:accounts){
 			
@@ -115,13 +136,26 @@ class Bank implements Serializable{
 			}
 		
 			return null;
-		} 
+		} */
 
-	public ArrayList<BankAccount> showAllAccounts(){
-		
-			return accounts;
+
+	 public BankAccount findBankAccount(long accnumber ){
+	
+			 return accounts.get(accnumber);
+
 			
-	}
+			/*	if(accounts.get(accNumber)){
+									
+				           return accounts.get(accnumber);
+					}
+				else
+			return null; */
+		}
+
+
+	public ConcurrentHashMap<Long, BankAccount> showAllAccounts() {
+    				return accounts;
+				}
 
 	public void transferMoney(long accNumFrom,long accNumTo,double amount)throws BankException{
 	
@@ -142,7 +176,7 @@ class Bank implements Serializable{
 				else throw new BankException();
 					
 		}
-	public double getTotalBankBalance(){
+/*	public double getTotalBankBalance(){
 		
 			double total=0;
 			for(BankAccount bas:accounts){
@@ -151,9 +185,33 @@ class Bank implements Serializable{
 				}
 			return total;
 				
-		}
+		} */
 
-	public void prosessMonthEnd(){
+   /*     public double getTotalBankBalance(){
+		
+			double total=0;
+			for(Long bas:accounts.keySet()){
+	
+					total+=accounts.get(bas).getBalance();
+				}
+			return total;
+				
+		} */
+
+			public double getTotalBankBalance() {
+
+   				 double total = 0;
+
+  				  for (BankAccount account : accounts.values()) {
+    				    total += account.getBalance();
+    					}
+
+    					return total;
+					}
+
+
+
+	/* public void prosessMonthEnd(){
 	
 			for(BankAccount bas:accounts){
 	
@@ -161,7 +219,14 @@ class Bank implements Serializable{
 				}
 			
 			
-		}
+		} */
+
+		  public void processMonthEnd() {
+
+   			 for (BankAccount account : accounts.values()) {
+    			    account.processMonthEnd();
+    				}
+			}
 
 	public void saveBank(){
 	
@@ -206,7 +271,7 @@ class Bank implements Serializable{
 		}
 
 
-		public <T extends BankAccount> ArrayList<T> findAccounts(Class<T> type) {
+	/*	public <T extends BankAccount> ArrayList<T> findAccounts(Class<T> type) {
 		
 				ArrayList<T> accs=new ArrayList<>();
 
@@ -224,9 +289,32 @@ class Bank implements Serializable{
 
 				return accs;
 				
-                        }
+                        } */
 
-		public  <T extends BankAccount> List<T> givesSpecificAccount(Class<T> type){
+
+			public <T extends BankAccount> ArrayList<T> findAccounts(Class<T> type) {
+		
+				ArrayList<T> accs=new ArrayList<>();
+
+
+				
+					for(BankAccount ba:accounts.values()){
+	
+
+						//if(type.isInstance(ba)){
+						if (ba.getClass() == type){
+
+							accs.add(type.cast(ba));
+						}
+	
+					}
+
+				return accs;
+
+				
+                        } 
+
+	/*	public  <T extends BankAccount> List<T> givesSpecificAccount(Class<T> type){
 	
 		         List<T>letsusLoopu     =  accounts.stream()
                                       .filter(account -> type.isInstance(account))
@@ -234,14 +322,14 @@ class Bank implements Serializable{
                                       .collect(Collectors.toList());
 		              	
 			
-			/*		for(T sa:letsusLoopu){
+			//		for(T sa:letsusLoopu){
 
-						System.out.println(sa);
+			//			System.out.println(sa);
 
-				     } */
+			//	     } 
 						return letsusLoopu;
 				}
-
+                    */
 		
 			
 	public static void main(String args[]){
@@ -256,37 +344,49 @@ class Bank implements Serializable{
 		
 				System.out.println("Style Style ma...");
 
-		
-	/*	BankAccount bankaccount=new SavingsAccount(123,"NallaSivam",50000,10,20000);
 
-			bankRef.openAccount(bankaccount);
+
+	
+	/*	
+		BankAccount bankaccount=new SavingsAccount(123,"NallaSivam",50000,10,20000);
+
+			//bankRef.openAccount(bankaccount);
+			bankRef.openAccount(123,bankaccount);
+
 		//	bankRef.saveBank(bankaccount);
 
 		BankAccount bankaccount1=new GoldAccount(2321,"Sivaperuman",100000,7,50000,100);
 
-			bankRef.openAccount(bankaccount1);
+			//bankRef.openAccount(bankaccount1);
+			bankRef.openAccount(2321,bankaccount1);
+
 		//	bankRef.saveBank(bankaccount1);
 
 		BankAccount bankaccount3=new GoldAccount(2311,"krishna",100000,7,50000,100);
 
-			bankRef.openAccount(bankaccount3);
+		//	bankRef.openAccount(bankaccount3);
+			bankRef.openAccount(2311,bankaccount3);
 		//	bankRef.saveBank(bankaccount3);
 
 		BankAccount bankaccount4=new CurrentAccount(212,"Arun eshwar",10000,20000);
-				bankRef.openAccount(bankaccount4);
+			//	bankRef.openAccount(bankaccount4);
+				bankRef.openAccount(212,bankaccount4);
+
 		//		bankRef.saveBank(bankaccount4);
 
 		BankAccount bankaccount5=new SalaryAccount(214,"Arunachalam",210100,5000);
-				bankRef.openAccount(bankaccount5);
+			//	bankRef.openAccount(bankaccount5);
+				bankRef.openAccount(214,bankaccount5);
+
 		//		bankRef.saveBank(bankaccount5);                                     
 
 				bankRef.saveBank();                                                        
 			//	bankRef.loadBank();	*/
 
 
-			List<GoldAccount> result =	bankRef.givesSpecificAccount(GoldAccount.class);
+	/*		List<GoldAccount> result =	bankRef.givesSpecificAccount(GoldAccount.class);
 
-			System.out.println(result);
+			System.out.println(result);    */
 
 				
 		ArrayList<SavingsAccount>savingsAccounts=bankRef.findAccounts(SavingsAccount.class);
@@ -324,12 +424,19 @@ class Bank implements Serializable{
 			BankAccount acc=bankRef.findBankAccount(123);
 			System.out.println(acc.toString());
 
-			ArrayList<BankAccount>listOfAccounts=bankRef.showAllAccounts();
+		/*	ArrayList<BankAccount>listOfAccounts=bankRef.showAllAccounts();
 
 			for (BankAccount account:listOfAccounts){
 	
 					System.out.println(account.toString());
-				}
+				} */
+
+				ConcurrentHashMap<Long, BankAccount> allAccounts =
+       					 bankRef.showAllAccounts();
+
+					for (BankAccount account : allAccounts.values()) {
+   					 System.out.println(account);
+						}
 
 		try{
 			bankRef.closeAccount(2311);
@@ -339,12 +446,21 @@ class Bank implements Serializable{
 			System.out.println(e);
 			}
 
-		ArrayList<BankAccount>listOfAccounts1=bankRef.showAllAccounts();
+	/*	ArrayList<BankAccount>listOfAccounts1=bankRef.showAllAccounts();
 
 			for (BankAccount account:listOfAccounts1){
 	
 					System.out.println(account.toString());
-				}
+				} */
+
+
+				ConcurrentHashMap<Long, BankAccount> allAccounts1 =
+       					 bankRef.showAllAccounts();
+
+					for (BankAccount account : allAccounts1.values()) {
+   					 System.out.println(account);
+						}
+
 
 		try{bankRef.transferMoney(2321,123,30000);}
 			catch(Exception e){
@@ -352,23 +468,42 @@ class Bank implements Serializable{
 					System.out.println(e);
 				}
 
-		ArrayList<BankAccount>listOfAccounts3=bankRef.showAllAccounts();
+	/*	ArrayList<BankAccount>listOfAccounts3=bankRef.showAllAccounts();
 
 			for (BankAccount account:listOfAccounts3){
 	
 					System.out.println(account.toString());
-				}
+				} */
+
+
+			ConcurrentHashMap<Long, BankAccount> allAccounts3 =
+       					 bankRef.showAllAccounts();
+
+					for (BankAccount account : allAccounts3.values()) {
+   					 System.out.println(account);
+						}
+
+
 
 			System.out.println(bankRef.getTotalBankBalance());
 
-			bankRef.prosessMonthEnd();
+			bankRef.processMonthEnd();
 
-		ArrayList<BankAccount>listOfAccounts4=bankRef.showAllAccounts();
+	/*	ArrayList<BankAccount>listOfAccounts4=bankRef.showAllAccounts();
 
 			for (BankAccount account:listOfAccounts4){
 	
 					System.out.println(account.toString());
-				}
+				} */
+			ConcurrentHashMap<Long, BankAccount> allAccounts4 =
+       					 bankRef.showAllAccounts();
+
+					for (BankAccount account : allAccounts4.values()) {
+   					 System.out.println(account);
+						}
+
+				
+
 			try{
 			
 			bankRef.withdraw(10000,212);
@@ -389,12 +524,20 @@ class Bank implements Serializable{
 			catch(Exception e){
 				System.out.println(e);
 				}
-			ArrayList<BankAccount>listOfAccounts5=bankRef.showAllAccounts();
+	/*		ArrayList<BankAccount>listOfAccounts5=bankRef.showAllAccounts();
 
 			for (BankAccount account:listOfAccounts5){
 	
 					System.out.println(account.toString());
-				}
+				} */
+
+				ConcurrentHashMap<Long, BankAccount> allAccounts5 =
+       					 bankRef.showAllAccounts();
+
+					for (BankAccount account : allAccounts5.values()) {
+   					 System.out.println(account);
+						}
+
 
 
 			

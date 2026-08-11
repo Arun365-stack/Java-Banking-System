@@ -40,7 +40,7 @@ class ThreadPractice{
 
 					
 				};
-
+//
 
 			Thread t1=new Thread(task);
 			Thread t2=new Thread(task1);

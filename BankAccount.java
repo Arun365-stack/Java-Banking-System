@@ -1,3 +1,4 @@
+import java.util.concurrent.*;
 import java.io.Serializable;
 abstract class BankAccount implements Serializable{
 	
@@ -168,6 +169,60 @@ public String toString() {
 				System.out.println(accounts[1].getBalance());
 				System.out.println(accounts[2].getBalance());   */
 
+
+			BankAccount account5=new GoldAccount(202,"red8df",20000,10,50000,100);
+
+						
+						
+			ExecutorService executor=Executors.newFixedThreadPool(2);
+
+					Runnable task1=()->{
+	
+					account5.withdraw(17000);						
+
+						};
+					Runnable task2=()->{
+	
+					try{
+					account5.deposit(17000);						
+						}
+					catch(Exception e){	
+
+						}
+						};
+					Runnable task3=()->{
+	
+					account5.withdraw(13000);						
+
+						};
+					Runnable task4=()->{
+	
+					try{
+					account5.deposit(1000);						
+						}
+					catch(Exception e){	
+
+						}
+						};
+
+
+
+				executor.submit(task1);
+				executor.submit(task2);
+				executor.submit(task3);
+				executor.submit(task4);
+
+
+				executor.shutdown();
+
+		   			try {
+   				 executor.awaitTermination(10, TimeUnit.SECONDS);
+					} catch (InterruptedException e) {
+   					 System.out.println(e);
+						}
+
+
+			System.out.println("balance of account5 gold account :"+account5.getBalance()); 
 		}
 	
 }
