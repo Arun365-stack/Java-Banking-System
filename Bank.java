@@ -166,7 +166,7 @@ class Bank implements Serializable{
 				if (fromAccount == null || toAccount == null) {
                                 throw new BankException();
                                     }
-				else if(fromAccount.withdraw(amount)){
+			/*	else if(fromAccount.withdraw(amount)){
 
 					try{
 					toAccount.deposit(amount);}
@@ -174,7 +174,23 @@ class Bank implements Serializable{
 	
 						System.out.println(e);
 						}}
-				else throw new BankException();
+				else throw new BankException(); */
+
+				    if (!fromAccount.withdraw(amount)) {
+      					  throw new BankException();
+   						 }
+
+   						 try {
+    					    toAccount.deposit(amount);
+
+    							} catch (BankException e) {
+
+      					  // Deposit failed → undo the withdrawal
+      					  fromAccount.deposit(amount);
+
+      							  throw e;
+    							}
+
 					
 		}
 /*	public double getTotalBankBalance(){
