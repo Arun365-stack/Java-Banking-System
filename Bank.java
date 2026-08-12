@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.concurrent.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.io.Serializable;
@@ -540,8 +541,56 @@ class Bank implements Serializable{
 
 
 
-			
+			ExecutorService executor=Executors.newFixedThreadPool(3);
 
+					executor.submit(()->{
+
+							try{
+							bankRef.withdraw(3000,212);
+								}
+							catch(Exception e){
+							System.out.println("Exception: " + e.getMessage());
+								}
+								});
+					executor.submit(()->{
+							try{
+							bankRef.deposit(1000,212);
+								}
+								catch(Exception e){
+							System.out.println("Exception: " + e.getMessage());
+								}
+
+								});
+					executor.submit(()->{
+							try{
+							bankRef.withdraw(3000,212);
+								}
+								catch(Exception e){
+							System.out.println("Exception: " + e.getMessage());
+								}
+
+								});
+
+						executor.shutdown();
+
+
+					
+		   			try {
+   				 executor.awaitTermination(10, TimeUnit.SECONDS);
+					} catch (InterruptedException e) {
+   					 System.out.println(e);
+						}
+
+
+			ConcurrentHashMap<Long, BankAccount> allAccounts6 =
+       					 bankRef.showAllAccounts();
+
+					for (BankAccount account : allAccounts6.values()) {
+   					 System.out.println(account);
+						}
+
+
+					
 	}
 	
 }

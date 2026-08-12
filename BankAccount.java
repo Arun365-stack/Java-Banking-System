@@ -13,7 +13,7 @@ abstract class BankAccount implements Serializable{
 		this.balance=balance<0 ? 0 : balance;
 	}
 
-	public void deposit(double amount) throws InvalidAmountException{
+	public synchronized void deposit(double amount) throws InvalidAmountException{
 	
 	
 		if(amount>0){
@@ -37,7 +37,7 @@ abstract class BankAccount implements Serializable{
 							
 		}
 
-	public boolean withdraw(double amount){
+	public synchronized boolean withdraw(double amount){
 	
 	/*	if(amount>0 && amount<=this.balance){
 			this.balance-=amount;
